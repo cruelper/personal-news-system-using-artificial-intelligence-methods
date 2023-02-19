@@ -1,0 +1,14 @@
+server:
+  port: 8080
+
+bot:
+  name:
+  token:
+  uri:
+
+spring:
+  rabbitmq:
+    host:
+    port:
+    username:
+    password:
