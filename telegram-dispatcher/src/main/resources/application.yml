@@ -1,14 +1,14 @@
 server:
-  port: 8080
+  port: 8084
+  ssl:
+    enabled: false
 
 bot:
-  name:
-  token:
-  uri:
+  name: {botName}
+  token: {botToken}
+  uri: {botUri}
 
 spring:
-  rabbitmq:
-    host:
-    port:
-    username:
-    password:
+  kafka:
+    bootstrap-servers: localhost:9092
+
