@@ -1,6 +1,7 @@
 package ru.nuykin.diplom.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
@@ -14,7 +15,7 @@ public class AnswerConsumerImpl implements AnswerConsumer {
     private final UpdateProcessor updateProcessor;
 
     @Override
-    @KafkaListener(topics = KafkaTopic.RESPONSE_TOPIC)
+    @KafkaListener(topics = KafkaTopic.RESPONSE_TOPIC, groupId = "mainGroup")
     public void consume(SendMessage sendMessage) {
         updateProcessor.setView(sendMessage);
     }

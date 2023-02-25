@@ -11,7 +11,7 @@ import ru.nuykin.diplom.service.UpdateProducer;
 @Log4j
 @RequiredArgsConstructor
 public class UpdateProducerImpl implements UpdateProducer {
-    private final KafkaTemplate<String, Object> kafkaTemplate;
+    private final KafkaTemplate<String, Update> kafkaTemplate;
 
     @Override
     public void produce(String kafkaTopic, Update update) {

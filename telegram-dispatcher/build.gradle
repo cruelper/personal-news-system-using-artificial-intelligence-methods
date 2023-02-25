@@ -10,7 +10,7 @@ sourceCompatibility = '17'
 def telegrambotStarterVersion = '6.1.0'
 def log4jVersion = '1.2.17'
 def lombokVersion = '1.18.22'
-def kafkaVersion = '2.7.2'
+def kafkaVersion = '3.0.1'
 
 repositories {
 	mavenCentral()
