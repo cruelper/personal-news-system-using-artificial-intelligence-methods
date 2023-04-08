@@ -1,0 +1,36 @@
+server:
+  port: 8085
+  ssl:
+    enabled: false
+
+bot:
+  name: ${botName}
+  token: ${botToken}
+
+spring:
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: mainGroup
+    producer:
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: false
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            client-id: NewsRecomendingBot
+            authorization-grant-type: authorization_code
+            scope: openid
+        provider:
+          keycloak:
+            issuer-uri: http://localhost:8080/auth/realms/NewsRecomendingBot
+            user-name-attribute: preferred_username
+      resourceserver:
+        jwt:
+          issuer-uri: http://localhost:8080/auth/realms/NewsRecomendingBot

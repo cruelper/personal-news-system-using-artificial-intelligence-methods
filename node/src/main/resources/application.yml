@@ -1,0 +1,28 @@
+server:
+  port: 8086
+  ssl:
+    enabled: false
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/diplomdb
+    username: admin
+    password: admin
+    driver-class-name: org.postgresql.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    database: postgresql
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+
+  kafka:
+    bootstrap-servers: localhost:9092
+    consumer:
+      group-id: mainGroup
+    producer:
+      properties:
+        spring:
+          json:
+            add:
+              type:
+                headers: false
