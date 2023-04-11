@@ -24,4 +24,10 @@ public class AnswerConsumerImpl implements AnswerConsumer {
     public void consumeNewsPrediction(SendMessage sendMessage) {
         updateProcessor.setView(sendMessage);
     }
+
+    @Override
+    @KafkaListener(topics = KafkaTopic.SIMILAR_RESPONSE_TOPIC, groupId = "mainGroup")
+    public void consumeSimilarNews(SendMessage sendMessage) {
+        updateProcessor.setView(sendMessage);
+    }
 }

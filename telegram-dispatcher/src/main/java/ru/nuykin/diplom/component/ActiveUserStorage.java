@@ -68,4 +68,7 @@ public class ActiveUserStorage {
         activeUsers.remove(telegramIdToKeycloakName.get(telegramId));
     }
 
+    public String getKeycloakEmailByUserId(Long userId) {
+        return telegramIdToKeycloakName.get(userId);
+    }
 }

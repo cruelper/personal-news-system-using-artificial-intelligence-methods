@@ -6,4 +6,6 @@ public interface AnswerConsumer {
     void consumeNewsFeedback(SendMessage sendMessage);
 
     void consumeNewsPrediction(SendMessage sendMessage);
+
+    void consumeSimilarNews(SendMessage sendMessage);
 }

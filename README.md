@@ -1,5 +1,4 @@
-# personal-news-system-using-artificial-intelligence-methods
-
-sudo npm install -g localtunnel
-
-lt --port 8084
+sudo systemctl start docker
+sudo docker-compose up
+sudo docker build -t mypostgres
+sudo docker run -p 5432:5432 postgres

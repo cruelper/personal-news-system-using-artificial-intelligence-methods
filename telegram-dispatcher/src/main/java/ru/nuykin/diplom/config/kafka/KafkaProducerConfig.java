@@ -8,7 +8,8 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.core.ProducerFactory;
 import org.springframework.kafka.support.serializer.JsonSerializer;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.nuykin.diplom.model.MyCallbackQuery;
+import ru.nuykin.diplom.model.MyUpdateQuery;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,12 +30,22 @@ public class KafkaProducerConfig {
     }
 
     @Bean
-    public ProducerFactory<String, Update> updateObjProducerFactory() {
+    public ProducerFactory<String, MyUpdateQuery> updateObjProducerFactory() {
         return new DefaultKafkaProducerFactory<>(updateObjProducerConfigs());
     }
 
     @Bean
-    public KafkaTemplate<String, Update> updateObjKafkaTemplate() {
+    public KafkaTemplate<String, MyUpdateQuery> updateObjKafkaTemplate() {
         return new KafkaTemplate<>(updateObjProducerFactory());
+    }
+
+    @Bean
+    public ProducerFactory<String, MyCallbackQuery> myCallbackQueryObjProducerFactory() {
+        return new DefaultKafkaProducerFactory<>(updateObjProducerConfigs());
+    }
+
+    @Bean
+    public KafkaTemplate<String, MyCallbackQuery> myCallbackQueryObjKafkaTemplate() {
+        return new KafkaTemplate<>(myCallbackQueryObjProducerFactory());
     }
 }

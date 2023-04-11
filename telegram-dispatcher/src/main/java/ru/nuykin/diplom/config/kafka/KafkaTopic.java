@@ -9,6 +9,10 @@ public class KafkaTopic {
     public static final String FEEDBACK_RESPONSE_TOPIC = "feedback-response-topic";
     // news predict to telegram dispatcher
     public static final String PREDICT_RESPONSE_TOPIC = "predict-response-topic";
+    // telegram dispatcher to similar news
+    public static final String SIMILAR_REQUEST_TOPIC = "similar-request-topic";
+    // similar news to telegram dispatcher
+    public static final String SIMILAR_RESPONSE_TOPIC = "similar-response-topic";
     // news parsing and embedding to node
     public static final String NEWS_TOPIC = "news-topic";
 }

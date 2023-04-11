@@ -10,6 +10,8 @@ import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKe
 import ru.nuykin.diplom.component.ActiveUserStorage;
 import ru.nuykin.diplom.config.kafka.KafkaTopic;
 import ru.nuykin.diplom.controller.UpdateProcessor;
+import ru.nuykin.diplom.model.MyCallbackQuery;
+import ru.nuykin.diplom.model.MyUpdateQuery;
 import ru.nuykin.diplom.service.DistributorService;
 import ru.nuykin.diplom.util.UserUtils;
 
@@ -45,10 +47,7 @@ public class DistributorServiceImpl implements DistributorService {
             else {
                 switch (text) {
                     case "/newspack" -> {
-                        distributeGetNewsMessage(update);
-                    }
-                    case "/feedback" -> {
-                        distributeFeedbackMessage(update);
+                        distributeGetNewsMessage(userId, update);
                     }
                     case "/help" -> {
                         distributeHelpMessage(chatId);
@@ -65,6 +64,15 @@ public class DistributorServiceImpl implements DistributorService {
         }
     }
 
+    @Override
+    public void distribute(MyCallbackQuery myCallbackQuery) {
+        if (myCallbackQuery.getCallbackType() == MyCallbackQuery.type.FEEDBACK) {
+            producerService.produce(KafkaTopic.FEEDBACK_REQUEST_TOPIC, myCallbackQuery);
+        } else if (myCallbackQuery.getCallbackType() == MyCallbackQuery.type.SIMILAR_NEWS) {
+            producerService.produce(KafkaTopic.SIMILAR_REQUEST_TOPIC, myCallbackQuery);
+        }
+    }
+
     public void distributeLogInSuccessMessage(Long chatId) {
         var sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
@@ -72,6 +80,7 @@ public class DistributorServiceImpl implements DistributorService {
         sendMessage.setText("Вы успешно авторизованы");
 
         updateProcessor.setView(sendMessage);
+        distributeStartMessage(chatId);
     }
 
     void distributeLogInMessage(Long chatId, Long userId) {
@@ -106,19 +115,24 @@ public class DistributorServiceImpl implements DistributorService {
         var sendMessage = new SendMessage();
         sendMessage.setChatId(chatId);
         sendMessage.setText(
-                "Привет! \n Напиши /help чтобы узнать, что я могу"
+                "Привет! \nНапиши /help чтобы узнать, что я могу"
         );
 
         updateProcessor.setView(sendMessage);
     }
 
-    void distributeGetNewsMessage(Update update) {
-        producerService.produce(KafkaTopic.PREDICT_REQUEST_TOPIC, update);
+    void distributeGetNewsMessage(Long userId, Update update) {
+        String keycloakEmail = activeUserStorage.getKeycloakEmailByUserId(userId);
+        MyUpdateQuery updateQuery = new MyUpdateQuery(update, keycloakEmail);
+        producerService.produce(
+                KafkaTopic.PREDICT_REQUEST_TOPIC,
+                updateQuery
+        );
     }
 
-    void distributeFeedbackMessage(Update update) {
-        producerService.produce(KafkaTopic.FEEDBACK_REQUEST_TOPIC, update);
-    }
+//    void distributeFeedbackMessage(Update update) {
+//        producerService.produce(KafkaTopic.FEEDBACK_REQUEST_TOPIC, update);
+//    }
 
     void distributeHelpMessage(Long chatId) {
         var sendMessage = new SendMessage();
@@ -127,7 +141,6 @@ public class DistributorServiceImpl implements DistributorService {
                 """
                         Справка:\s
                         /newspack - получить подборку новостей
-                        /feedback - оценить подборку новостей
                         /help - доступные команды
                         /nottouch - не нажимать
                         /logout - выйти из аккаунта
