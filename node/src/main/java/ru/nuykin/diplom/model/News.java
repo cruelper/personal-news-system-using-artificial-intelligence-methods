@@ -3,6 +3,7 @@ package ru.nuykin.diplom.model;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -26,4 +27,13 @@ public class News {
 
     @OneToMany(mappedBy="news", cascade=CascadeType.ALL)
     private List<ReadNews> readNewsList;
+
+    public News(String title, String url, String embedding, Date date, NewsSource newsSource) {
+        this.title = title;
+        this.url = url;
+        this.embedding = embedding;
+        this.date = date;
+        this.newsSource = newsSource;
+        this.readNewsList = Collections.EMPTY_LIST;
+    }
 }

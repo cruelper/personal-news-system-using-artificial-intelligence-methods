@@ -9,7 +9,8 @@ import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory;
 import org.springframework.kafka.core.ConsumerFactory;
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory;
 import org.springframework.kafka.support.serializer.JsonDeserializer;
-import org.telegram.telegrambots.meta.api.objects.Update;
+import ru.nuykin.diplom.model.MyCallbackQuery;
+import ru.nuykin.diplom.model.MyUpdateQuery;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -29,19 +30,36 @@ class KafkaConsumerConfig {
     }
 
     @Bean
-    public ConsumerFactory<String, Update> SendMessageObjConsumerFactory() {
+    public ConsumerFactory<String, MyUpdateQuery> SendMessageObjConsumerFactory() {
         return new DefaultKafkaConsumerFactory<>(
                 SendMessageObjConsumerConfigs(),
                 new StringDeserializer(),
-                new JsonDeserializer<Update>().trustedPackages("*")
+                new JsonDeserializer<MyUpdateQuery>().trustedPackages("*")
         );
     }
 
     @Bean
-    public ConcurrentKafkaListenerContainerFactory<String, Update> kafkaListenerContainerFactory() {
-        ConcurrentKafkaListenerContainerFactory<String, Update> factory =
+    public ConcurrentKafkaListenerContainerFactory<String, MyUpdateQuery> kafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, MyUpdateQuery> factory =
                 new ConcurrentKafkaListenerContainerFactory<>();
         factory.setConsumerFactory(SendMessageObjConsumerFactory());
+        return factory;
+    }
+
+    @Bean
+    public ConsumerFactory<String, MyCallbackQuery> MyCallbackQueryObjConsumerFactory() {
+        return new DefaultKafkaConsumerFactory<>(
+                SendMessageObjConsumerConfigs(),
+                new StringDeserializer(),
+                new JsonDeserializer<MyCallbackQuery>().trustedPackages("*")
+        );
+    }
+
+    @Bean
+    public ConcurrentKafkaListenerContainerFactory<String, MyCallbackQuery> myCallbackQuerykafkaListenerContainerFactory() {
+        ConcurrentKafkaListenerContainerFactory<String, MyCallbackQuery> factory =
+                new ConcurrentKafkaListenerContainerFactory<>();
+        factory.setConsumerFactory(MyCallbackQueryObjConsumerFactory());
         return factory;
     }
 }
